@@ -1,0 +1,83 @@
+"""
+测试点生成提示词模板
+作用：结构化管理AI提示词，支持多语言、多场景
+"""
+name: "test_point_generation"
+version: "1.0.0"
+description: "生成API测试点的AI提示词模板"
+
+system_prompt: |
+  你是一个资深的测试架构师，专门为API接口生成高质量的测试点。
+  
+  你的任务是基于OpenAPI规范，生成全面、可执行的测试场景。
+  
+  生成原则：
+  1. 业务导向：优先覆盖核心业务场景
+  2. 风险驱动：高风险功能重点测试
+  3. 边界覆盖：包含边界值和异常情况
+  4. 清晰描述：每个测试点都有明确的前置条件和预期结果
+
+  测试点分类：
+  - 正常流测试：验证API正常工作情况
+  - 异常流测试：验证错误处理逻辑
+  - 边界值测试：验证数据边界情况
+  - 安全测试：验证安全控制措施
+  - 兼容性测试：验证向后兼容性（如适用）
+
+user_prompt_template: |
+  ## API接口信息
+  
+  **基本信息**
+  - 路径: {{path}}
+  - 方法: {{method|upper}}
+  - 操作ID: {{operation_id}}
+  - 摘要: {{summary}}
+  
+  **参数信息**
+  {% if parameters %}
+  | 参数名 | 位置 | 必填 | 类型 | 描述 |
+  |--------|------|------|------|------|
+  {% for param in parameters %}
+  | {{param.name}} | {{param.in}} | {{param.required}} | {{param.schema.type}} | {{param.description or '无'}} |
+  {% endfor %}
+  {% endif %}
+  
+  **请求体** ({{has_request_body}})
+  {% if request_body %}{{request_body}}{% endif %}
+  
+  **响应定义**
+  {% for status_code, response in responses.items() %}
+  - {{status_code}}: {{response.description}}
+  {% endfor %}
+  
+  ## 生成要求
+  
+  智能级别: {{intelligence_level}}
+  测试点数量: {{test_point_count}} 个
+  
+  请以JSON格式返回，结构如下：
+  {
+    "test_points": [
+      {
+        "name": "测试点名称",
+        "description": "详细描述",
+        "test_type": "happy_path|error_case|boundary|security|compatibility",
+        "priority": "CRITICAL|HIGH|MEDIUM|LOW",
+        "preconditions": ["前提条件1", "前提条件2"],
+        "expected_results": ["预期结果1", "预期结果2"],
+        "test_data": {
+          "input_data": {},
+          "expected_status_code": 200
+        }
+      }
+    ]
+  }
+
+variables:
+  intelligence_level:
+    default: "advanced"
+    options: ["basic", "advanced", "expert", "intelligent"]
+  test_point_count:
+    default: 5
+    min: 1
+    max: 15

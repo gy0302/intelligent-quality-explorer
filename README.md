@@ -7,7 +7,7 @@
 本项目不仅是一个技术的实现，更是对**下一代智能质量效能体系**的持续探索与沉淀。
 
 ### 项目定位
-本项目将以[行业实践痛点](./docs/table/pain-point-problem.md)出发，结合**智能化技术、质量体系规范、其他技术（DevOps技术、云技术等）**，以**接口自动化测试**流程中**自动生成测试用例**的场景为起点，开始探索研发过程中质量与效能双重提高。同时对探索成功的成果进行沉淀，以便形成可复用的能力供后续应用。   
+本项目将以[行业实践痛点](docs/architecture/pain-point-problem.md)出发，结合**智能化技术、质量体系规范、其他技术（DevOps技术、云技术等）**，以**接口自动化测试**流程中**自动生成测试用例**的场景为起点，开始探索研发过程中质量与效能双重提高。同时对探索成功的成果进行沉淀，以便形成可复用的能力供后续应用。   
 初步规划的探索点如下（后续将持续迭代规划）：   
 - **接口测试**：
   - **自动生成&维护接口用例**：流程包含，自动生成测试点->测试用例->测试数据->测试脚本等
@@ -35,25 +35,26 @@
 |-------|--------------|---------------------------------------------------------------------|
 | 研究路线图 | 展示研究规划       | [路线规划文档](./ROADMAP.md)                                              |
 | 架构设计  | 展示全局架构及子方向架构 | [架构设计文档](docs/design/explore-design-doc.md)                         |
-| 设计方案  | 展示设计思路       | [质量与效能度量方案](docs/design/quality-and-efficiency-measurement-plan.md) |
 | 操作手册  | 部署使用的操作步骤    |                                                                     |
 
 
 
 ## 技术栈
-- 后端：Python、FastAPI
-- AI/ML:PyTorch/TensorFlow + Transformers
-- 部署：Docker + Docker-compose
-- 数据库：PostgreSQL + Neo4j（知识图谱）
-- 测试框架：Pytest
-- 前端：
+- 后端: Python + FastAPI + SQLite / PostgreSQL/ Neo4j（知识图谱）
+- 前端: Streamlit + Plotly
+- AI: LangChain + Ollama
+- 架构: DDD + Clean Architecture
+- 测试: pytest + unittest
+- 部署: Nginx + Docker / Docker-compose
+
 
 ## 研究进展
 
 ### 当前进展
 - 智能测试-接口测试
   - 架构设计（☑️ 已完成）
-  - 框架搭建（🚩 进行中）
+  - 代码框架搭建（☑️ 已完成）
+  - 按流程开发MVP（🚩 进行中）
   - 测试输入项解析（🔘未启动）
 
 ### 下一步计划
