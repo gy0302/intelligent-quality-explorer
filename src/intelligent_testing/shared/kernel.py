@@ -6,8 +6,8 @@ import logging
 from typing import Dict, Any, Type, Optional, Callable
 from threading import Lock
 
-from config.settings import settings
-from src.shared.utils.logging_utils import setup_logging
+from ...configs.settings import settings
+from .shared.utils.logging_utils import setup_logging
 
 logger = logging.getLogger(__name__)
 

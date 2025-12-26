@@ -6,7 +6,8 @@ import os
 import sys
 from pathlib import Path
 from typing import Dict, List, Optional, Any
-from pydantic import BaseSettings, Field, validator
+from pydantic import BaseModel, Field, field_validator, ConfigDict
+from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
 
 # 加载环境变量
@@ -55,7 +56,7 @@ class Settings(BaseSettings):
     ANTHROPIC_MODEL: str = Field("claude-3-opus", description="Anthropic模型")
 
     OLLAMA_BASE_URL: str = Field("http://localhost:11434", description="Ollama基础URL")
-    OLLAMA_MODEL: str = Field("llama2", description="Ollama模型")
+    OLLAMA_MODEL: str = Field("qwen3:8b", description="Qwen模型")
 
     # 本地LLM配置
     LOCAL_LLM_ENABLED: bool = Field(False, description="启用本地LLM")
@@ -66,19 +67,20 @@ class Settings(BaseSettings):
     LANGCHAIN_PROJECT: Optional[str] = Field(None, description="LangChain项目")
 
     # 数据库配置
-    DATABASE_URL: str = Field("sqlite:///./data/test_pilot.db", description="数据库URL")
+   # DATABASE_URL: str = Field("sqlite:///./data/test_pilot.db", description="数据库URL")
+    DATABASE_URL: str = Field("postgresql://postgres:postgres@localhost:5432/qadatabase", description="数据库URL")
     DATABASE_ECHO: bool = Field(False, description="数据库回显")
 
-    # Redis配置
+    # Redis配置-需安装
     REDIS_ENABLED: bool = Field(False, description="启用Redis")
     REDIS_URL: str = Field("redis://localhost:6379/0", description="Redis URL")
     REDIS_PASSWORD: Optional[str] = Field(None, description="Redis密码")
 
-    # 向量数据库配置
+    # 向量数据库配置-需安装
     VECTOR_DB_TYPE: str = Field("chromadb", description="向量数据库类型")
     CHROMA_PERSIST_DIR: str = Field("./data/chroma_db", description="Chroma持久化目录")
 
-    # 安全配置
+    # 安全配置-需生成密钥
     SECRET_KEY: str = Field("your-secret-key-change-in-production", description="密钥")
     JWT_ALGORITHM: str = Field("HS256", description="JWT算法")
     ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(30, description="访问令牌过期时间")
@@ -105,21 +107,26 @@ class Settings(BaseSettings):
     AI_ASSISTANT_DEFAULT_EXPERT: str = Field("api_testing_expert", description="默认专家")
     AI_ASSISTANT_HISTORY_SIZE: int = Field(50, description="历史记录大小")
 
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-        case_sensitive = False
+    # Pydantic V2 配置方式
+    model_config = ConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        case_sensitive=False,
+        extra="ignore"  # 可选：忽略额外的环境变量
+    )
 
-    @validator("ENVIRONMENT")
-    def validate_environment(cls, v):
+    @field_validator("ENVIRONMENT")
+    @classmethod
+    def validate_environment(cls, v: str) -> str:
         """验证环境"""
         valid_environments = ["development", "testing", "staging", "production"]
         if v not in valid_environments:
             raise ValueError(f"环境必须是: {', '.join(valid_environments)}")
         return v
 
-    @validator("LLM_PROVIDER")
-    def validate_llm_provider(cls, v):
+    @field_validator("LLM_PROVIDER")
+    @classmethod
+    def validate_llm_provider(cls, v: str) -> str:
         """验证LLM提供商"""
         valid_providers = ["openai", "anthropic", "ollama", "local"]
         if v not in valid_providers:
