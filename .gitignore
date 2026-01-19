@@ -49,3 +49,6 @@ logs/
 *.bak
 *.tmp
 .cache/
+
+#deploy
+/deploy/

@@ -62,6 +62,18 @@ const routes: RouteRecordRaw[] = [
     meta: { title: '报告列表' }
   },
   {
+    path: '/reports/analysis',
+    name: 'ReportAnalysis',
+    component: () => import('../views/Reports.vue'),
+    meta: { title: '报告分析' }
+  },
+  {
+    path: '/test-plan',
+    name: 'TestPlan',
+    component: () => import('../views/Reports.vue'),
+    meta: { title: '测试计划' }
+  },
+  {
     path: '/workflow',
     name: 'Workflow',
     component: () => import('../views/Workflow.vue'),
