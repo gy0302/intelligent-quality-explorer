@@ -14,16 +14,16 @@ const routes: RouteRecordRaw[] = [
     meta: { title: '仪表盘' }
   },
   {
-    path: '/api/import',
-    name: 'ApiImport',
-    component: () => import('../views/ApiImport.vue'),
-    meta: { title: 'API导入' }
+    path: '/projects',
+    name: 'ProjectManagement',
+    component: () => import('../views/ProjectManagement.vue'),
+    meta: { title: '项目管理' }
   },
   {
     path: '/api/list',
     name: 'ApiList',
     component: () => import('../views/ApiList.vue'),
-    meta: { title: 'API列表' }
+    meta: { title: '接口管理' }
   },
   {
     path: '/test-points',

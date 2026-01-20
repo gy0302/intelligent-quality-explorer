@@ -146,9 +146,9 @@ const fetchTestPoints = async () => {
       url = `/test-points/interface/${filterForm.value.interfaceId}`
     }
     
-    const response = await request.get<TestPoint[]>(url)
-    testPoints.value = response
-    total.value = response.length
+    const response = await request.get(url)
+    testPoints.value = response as unknown as TestPoint[]
+    total.value = (response as unknown as TestPoint[]).length
   } catch (error) {
     ElMessage.error('获取测试点列表失败')
     console.error('获取测试点列表失败:', error)

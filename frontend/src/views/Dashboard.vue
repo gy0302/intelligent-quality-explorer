@@ -198,17 +198,17 @@ const fetchStatistics = async () => {
     apiProjectsCount.value = Array.isArray(apiProjects) ? apiProjects.length : 0
     
     // 获取测试用例数量
-    const testCases = await request.get('/test-cases')
+    const testCases = await request.get('/test-cases/')
     testCasesCount.value = Array.isArray(testCases) ? testCases.length : 0
     
     // 获取测试脚本数量
-    const testScripts = await request.get('/test-scripts')
+    const testScripts = await request.get('/test-scripts/')
     testScriptsCount.value = Array.isArray(testScripts) ? testScripts.length : 0
     
     // 获取工作流度量指标
-    const workflowMetrics = await request.get('/workflows/metrics')
-    if (workflowMetrics && workflowMetrics.success_rate) {
-      successRate.value = `${workflowMetrics.success_rate}%`
+    const workflowMetrics = await request.get('/workflows/metrics', { params: { project_id: 1 } })
+    if (workflowMetrics && workflowMetrics.data && workflowMetrics.data.success_rate !== undefined) {
+      successRate.value = `${workflowMetrics.data.success_rate}%`
     }
   } catch (error) {
     console.error('获取统计数据失败:', error)

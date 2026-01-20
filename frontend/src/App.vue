@@ -37,14 +37,10 @@
           </el-menu-item>
           
           <!-- 项目管理 -->
-          <el-sub-menu index="project-management">
-            <template #title>
-              <el-icon><Collection /></el-icon>
-              <span>项目管理</span>
-            </template>
-            <el-menu-item index="project-list">项目列表</el-menu-item>
-            <el-menu-item index="project-detail">项目详情</el-menu-item>
-          </el-sub-menu>
+          <el-menu-item index="project-management">
+            <el-icon><Collection /></el-icon>
+            <span>项目管理</span>
+          </el-menu-item>
           
           <!-- 工作流管理 -->
           <el-sub-menu index="workflow-management">
@@ -63,8 +59,7 @@
               <el-icon><Document /></el-icon>
               <span>接口测试</span>
             </template>
-            <el-menu-item index="api-import">API导入</el-menu-item>
-            <el-menu-item index="api-list">API列表</el-menu-item>
+            <el-menu-item index="api-list">接口管理</el-menu-item>
             <el-sub-menu index="test-design">
               <template #title>
                 <span>测试设计</span>
@@ -188,7 +183,7 @@ import { useRouter } from 'vue-router'
 import { 
   User, ArrowDown, Histogram, Document, Star, 
   RefreshRight, Setting, Collection, Monitor, 
-  Tickets, CircleClose, TrendCharts, Menu, 
+  Tickets, CircleClose, TrendCharts, 
   ArrowLeft, ArrowRight 
 } from '@element-plus/icons-vue'
 
@@ -211,8 +206,8 @@ const handleMenuSelect = (index: string) => {
     case 'dashboard':
       router.push('/dashboard')
       break
-    case 'api-import':
-      router.push('/api/import')
+    case 'project-management':
+      router.push('/projects')
       break
     case 'api-list':
       router.push('/api/list')
@@ -259,7 +254,9 @@ onMounted(() => {
   const currentPath = router.currentRoute.value.path
   if (currentPath === '/dashboard') {
     activeMenu.value = 'dashboard'
-  } else if (currentPath.startsWith('/api')) {
+  } else if (currentPath.startsWith('/projects')) {
+    activeMenu.value = 'project-management'
+  } else if (currentPath.startsWith('/api/list')) {
     activeMenu.value = 'api-test'
   } else if (currentPath.startsWith('/test-points')) {
     activeMenu.value = 'test-points'

@@ -62,7 +62,7 @@ class AppSettings(BaseSettings):
     max_content_length: int = Field(16777216, alias="MAX_CONTENT_LENGTH")
 
     # CORS
-    cors_origins: List[str] = Field(["http://localhost:8501"], alias="CORS_ORIGINS")
+    cors_origins: List[str] = Field(["http://localhost:8501", "http://localhost:5173"], alias="CORS_ORIGINS")
 
     model_config = ConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 

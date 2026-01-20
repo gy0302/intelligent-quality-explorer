@@ -161,9 +161,9 @@ const fetchTestScripts = async () => {
       params.test_case_id = filterForm.value.testCaseId
     }
     
-    const response = await request.get<TestScript[]>('/test-scripts', { params })
-    testScripts.value = response
-    total.value = response.length
+    const response = await request.get('/test-scripts', { params })
+    testScripts.value = response as unknown as TestScript[]
+    total.value = (response as unknown as TestScript[]).length
   } catch (error) {
     ElMessage.error('获取测试脚本列表失败')
     console.error('获取测试脚本列表失败:', error)

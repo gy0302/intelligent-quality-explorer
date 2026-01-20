@@ -9,6 +9,7 @@ from src.config.settings import settings
 from src.api.ai_review import router as ai_review_router
 from src.api.api_management import router as api_management_router
 from src.api.config import router as config_router
+from src.api.project_management import router as project_management_router
 from src.api.test_case import router as test_case_router
 from src.api.test_execution import router as test_execution_router
 from src.api.test_point import router as test_point_router
@@ -32,6 +33,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# 注册项目管理路由器
+app.include_router(project_management_router,prefix="")
 # 注册API管理路由器
 app.include_router(api_management_router,prefix="")
 # 注册AI评审路由器

@@ -179,9 +179,9 @@ const fetchTestCases = async () => {
       params.priority = filterForm.value.priority
     }
     
-    const response = await request.get<TestCase[]>('/test-cases', { params })
-    testCases.value = response
-    total.value = response.length
+    const response = await request.get('/test-cases', { params })
+    testCases.value = response as unknown as TestCase[]
+    total.value = (response as unknown as TestCase[]).length
   } catch (error) {
     ElMessage.error('获取测试用例列表失败')
     console.error('获取测试用例列表失败:', error)
