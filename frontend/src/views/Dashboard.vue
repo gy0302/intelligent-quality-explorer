@@ -7,7 +7,7 @@
       <el-card class="stat-card">
         <div class="stat-content">
           <div class="stat-info">
-            <div class="stat-value">12</div>
+            <div class="stat-value">{{ apiProjectsCount }}</div>
             <div class="stat-label">API项目</div>
           </div>
           <div class="stat-icon">
@@ -19,7 +19,7 @@
       <el-card class="stat-card">
         <div class="stat-content">
           <div class="stat-info">
-            <div class="stat-value">245</div>
+            <div class="stat-value">{{ testCasesCount }}</div>
             <div class="stat-label">测试用例</div>
           </div>
           <div class="stat-icon">
@@ -31,7 +31,7 @@
       <el-card class="stat-card">
         <div class="stat-content">
           <div class="stat-info">
-            <div class="stat-value">98</div>
+            <div class="stat-value">{{ testScriptsCount }}</div>
             <div class="stat-label">测试脚本</div>
           </div>
           <div class="stat-icon">
@@ -43,7 +43,7 @@
       <el-card class="stat-card">
         <div class="stat-content">
           <div class="stat-info">
-            <div class="stat-value">95.2%</div>
+            <div class="stat-value">{{ successRate }}</div>
             <div class="stat-label">成功率</div>
           </div>
           <div class="stat-icon">
@@ -110,14 +110,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { 
   Document, Notebook, Cpu, CircleCheck, 
   Clock, Plus, Edit, Check, InfoFilled 
 } from '@element-plus/icons-vue'
+import request from '../utils/request'
 
 // 统计数据
-// 这些数据可以从API获取，目前使用静态数据直接在模板中显示
+const apiProjectsCount = ref(0)
+const testCasesCount = ref(0)
+const testScriptsCount = ref(0)
+const successRate = ref('0%')
 
 // 最近活动数据
 const recentActivities = ref([
@@ -185,6 +189,36 @@ const workflows = ref([
     updatedAt: '2024-01-10 16:00'
   }
 ])
+
+// 获取统计数据
+const fetchStatistics = async () => {
+  try {
+    // 获取API项目数量
+    const apiProjects = await request.get('/api-projects')
+    apiProjectsCount.value = Array.isArray(apiProjects) ? apiProjects.length : 0
+    
+    // 获取测试用例数量
+    const testCases = await request.get('/test-cases')
+    testCasesCount.value = Array.isArray(testCases) ? testCases.length : 0
+    
+    // 获取测试脚本数量
+    const testScripts = await request.get('/test-scripts')
+    testScriptsCount.value = Array.isArray(testScripts) ? testScripts.length : 0
+    
+    // 获取工作流度量指标
+    const workflowMetrics = await request.get('/workflows/metrics')
+    if (workflowMetrics && workflowMetrics.success_rate) {
+      successRate.value = `${workflowMetrics.success_rate}%`
+    }
+  } catch (error) {
+    console.error('获取统计数据失败:', error)
+  }
+}
+
+// 组件挂载时获取数据
+onMounted(() => {
+  fetchStatistics()
+})
 </script>
 
 <style scoped>
