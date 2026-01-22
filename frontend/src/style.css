@@ -3,6 +3,20 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  /* 禁用元素默认选中行为 */
+  user-select: none;
+  outline: none;
+}
+
+/* 允许特定元素的文本选择 */
+input, textarea, select, button, .el-input__inner, .el-textarea__inner {
+  user-select: auto;
+}
+
+/* 禁用元素焦点轮廓，防止鼠标移动时出现选中效果 */
+*:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 html, body {
